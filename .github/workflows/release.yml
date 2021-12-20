@@ -32,8 +32,8 @@ jobs:
           echo ::set-output name=version::$new_version
           echo ::set-output name=tag::$new_tag
     outputs:
-      new_version: ${{ steps.execute-script.outputs.version }}
-      new_tag: ${{ steps.execute-script.outputs.tag }}
+      new_version: ${{ steps.get-next-version-and-tag.outputs.version }}
+      new_tag: ${{ steps.get-next-version-and-tag.outputs.tag }}
 
   # update the version file
   update_version_and_push_tag:
