@@ -57,8 +57,7 @@ jobs:
         run : |
           echo "current folder = $PWD"
           echo "current branch = $(git branch --show-current)"
-          output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --bump_version)
-          cat version.json
+          output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --update_version)
 
       # add and commit the updated version.json to main
       - name: add and commit to main
