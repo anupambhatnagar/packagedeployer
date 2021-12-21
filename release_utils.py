@@ -1,12 +1,11 @@
 import argparse
-import json
 from typing import Tuple
-
+import src
 from setup import find_version
 
 
 def get_next_version(release_type) -> Tuple[str, str]:
-    current_ver = find_version("version.json")
+    current_ver = find_version("src/__init__.py")
     first, second, third = list(map(int, current_ver.split(".")))
     if release_type == "patch":
         third += 1
@@ -25,42 +24,43 @@ def get_next_version(release_type) -> Tuple[str, str]:
     return new_version_str, new_tag_str
 
 
-def bump_version(new_version) -> None:
+def update_version(new_version) -> None:
     """
-    given the current version, bump the version to the
+    given the current version, update the version to the
     next version depending on the type of release.
     """
-    # new_version = get_next_version('patch')
 
-    with open("version.json", "r") as f:
-        data = json.load(f)
-    print("The current version is: %s" % data["version"])
+    current_version = src.__version__
 
-    data["version"] = new_version
-    with open("version.json", "w") as f:
-        json.dump(data, f)
-    print("The new version is: %s" % new_version)
+    with open("fairscale/__init__.py", "r") as reader:
+        init_file_data = reader.read()
+
+    init_file_data = init_file_data.replace(current_version, new_version)
+
+    with open("fairscale/__init__.py", "w") as writer:
+        writer.write(init_file_data)
+
 
 
 def main(args):
     if args.release_type in ["major", "minor", "patch"]:
-        output = get_next_version(args.release_type)
+        new_version, new_tag = get_next_version(args.release_type)
     else:
         raise ValueError("Incorrect release type specified")
 
-    if args.bump_version:
-        bump_version(output[0])
+    if args.update_version:
+        update_version(new_version)
 
-    return output
+    return (new_version, new_tag)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Versioning utils")
     parser.add_argument("--release_type", type=str, required=True, help="type of release = major/minor/patch")
     parser.add_argument(
-        "--bump_version", action="store_true", required=False, help="updates the version in version.json"
+        "--update_version", action="store_true", required=False, help="updates the version in fairscale/__init__.py"
     )
 
     args = parser.parse_args()
-    result = main(args)
-    print(result)
+    (new_version, new_tag) = main(args)
+    print(new_version, new_tag)
