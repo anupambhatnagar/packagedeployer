@@ -23,7 +23,7 @@ jobs:
       - name: get next version and tag
         id: get-next-version-and-tag
         run: |
-          output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }})
+          output=$(python3 release_utils.py --release-type ${{ github.event.inputs.name }})
           echo $output
           new_version=$(echo $output | awk '{print $1}')
           new_tag=$(echo $output | awk '{print $2}')
@@ -57,7 +57,7 @@ jobs:
         run : |
           echo "current folder = $PWD"
           echo "current branch = $(git branch --show-current)"
-          output=$(python3 release_utils.py --release_type ${{ github.event.inputs.name }} --update_version)
+          output=$(python3 release_utils.py --release-type ${{ github.event.inputs.name }} --update-version)
 
       # add and commit the updated version.json to main
       - name: add and commit to main
