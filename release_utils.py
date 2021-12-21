@@ -1,11 +1,12 @@
 import argparse
-from typing import Tuple
 import re
+
+from typing import Tuple
 
 from setup import find_version
 
 
-def get_next_version(release_type) -> Tuple[str, str]:
+def get_next_version(release_type) -> Tuple[str, str, str]:
     current_ver = find_version("src/version.py")
     version_list = [int(x) for x in current_ver.strip("\'").split(".")]
     major, minor, patch = version_list[0], version_list[1], version_list[2]
@@ -65,7 +66,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Versioning utils")
     parser.add_argument("--release-type", type=str, required=True, help="type of release = major/minor/patch")
     parser.add_argument(
-        "--update-version", action="store_true", required=False, help="updates the version in fairscale/__init__.py"
+        "--update-version", action="store_true", required=False, help="updates the version in src/version.py"
     )
 
     args = parser.parse_args()
