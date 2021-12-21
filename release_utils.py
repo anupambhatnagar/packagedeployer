@@ -62,5 +62,5 @@ if __name__ == "__main__":
     )
 
     args = parser.parse_args()
-    (new_version, new_tag) = main(args)
+    new_version, new_tag = main(args)
     print(new_version, new_tag)
