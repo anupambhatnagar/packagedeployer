@@ -13,7 +13,7 @@ def find_version(version_file_path):
 
 if __name__ == "__main__":
     setuptools.setup(
-        name="package-deployer2",
+        name="packagedeployer",
         version=find_version("src/version.py"),
         include_package_data=True,
         setup_requires=["ninja"],  # ninja is required to build extensions
