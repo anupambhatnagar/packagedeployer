@@ -7,7 +7,7 @@ from setup import find_version
 
 
 def get_next_version(release_type) -> Tuple[str, str, str]:
-    current_ver = find_version("src/version.py")
+    current_ver = find_version("packagedeployer/version.py")
     version_list = [int(x) for x in current_ver.strip("\'").split(".")]
     major, minor, patch = version_list[0], version_list[1], version_list[2]
     if release_type == "patch":
@@ -33,7 +33,7 @@ def update_version(new_version_tuple) -> None:
     next version depending on the type of release.
     """
 
-    with open("src/version.py", "r") as reader:
+    with open("packagedeployer/version.py", "r") as reader:
         current_version_data = reader.read()
 
     # for line in current_version_data:
@@ -43,7 +43,7 @@ def update_version(new_version_tuple) -> None:
         new_version_data = "__version_tuple__ = %s\n" % str(new_version_tuple)
         current_version_data = current_version_data.replace(version_match.string, new_version_data)
 
-        with open("src/version.py", "w") as writer:
+        with open("packagedeployer/version.py", "w") as writer:
             writer.write(current_version_data)
     else:
         raise RuntimeError("__version_tuple__ not found in version.py")
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Versioning utils")
     parser.add_argument("--release-type", type=str, required=True, help="type of release = major/minor/patch")
     parser.add_argument(
-        "--update-version", action="store_true", required=False, help="updates the version in src/version.py"
+        "--update-version", action="store_true", required=False, help="updates the version in packagedeployer/version.py"
     )
 
     args = parser.parse_args()
