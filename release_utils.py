@@ -6,19 +6,20 @@ from setup import find_version
 
 def get_next_version(release_type) -> Tuple[str, str]:
     current_ver = find_version("src/__init__.py")
-    first, second, third = list(map(int, current_ver.split(".")))
+    version_list = [int(x) for x in current_ver.strip("\"").split(".")]
+    major, minor, patch = version_list[0], version_list[1], version_list[2]
     if release_type == "patch":
-        third += 1
+        patch += 1
     elif release_type == "minor":
-        second += 1
-        third = 0
+        minor += 1
+        patch = 0
     elif release_type == "major":
-        first += 1
-        second = third = 0
+        major += 1
+        minor = patch = 0
     else:
         raise ValueError("Incorrect release type specified. Acceptable types are major, minor and patch.")
 
-    new_version_tuple = (first, second, third)
+    new_version_tuple = (major, minor, patch)
     new_version_str = ".".join([str(x) for x in new_version_tuple])
     new_tag_str = "v" + new_version_str
     return new_version_str, new_tag_str
@@ -32,14 +33,13 @@ def update_version(new_version) -> None:
 
     current_version = src.__version__
 
-    with open("fairscale/__init__.py", "r") as reader:
+    with open("src/__init__.py", "r") as reader:
         init_file_data = reader.read()
 
     init_file_data = init_file_data.replace(current_version, new_version)
 
-    with open("fairscale/__init__.py", "w") as writer:
+    with open("src/__init__.py", "w") as writer:
         writer.write(init_file_data)
-
 
 
 def main(args):
