@@ -1,7 +1,7 @@
 import argparse
 from typing import Tuple
 import re
-import src
+
 from setup import find_version
 
 
@@ -39,14 +39,14 @@ def update_version(new_version_tuple) -> None:
     version_match = re.search(r"^__version_tuple__ ", current_version_data)
     
     if version_match:
-            new_data = "__version_tuple__ = %s\n" % str(new_version_tuple)
-            print(new_data, version_match)
-            current_version_data = current_version_data.replace(version_match.string, new_data)
+        new_version_data = "__version_tuple__ = %s\n" % str(new_version_tuple)
+        current_version_data = current_version_data.replace(version_match.string, new_version_data)
 
-    with open("src/version.py", "w") as writer:
-        writer.write(current_version_data)
-    
-
+        with open("src/version.py", "w") as writer:
+            writer.write(current_version_data)
+    else:
+        raise RuntimeError("__version_tuple__ not found in version.py")
+        
 
 def main(args):
     if args.release_type in ["major", "minor", "patch"]:
@@ -58,16 +58,16 @@ def main(args):
         update_version(new_version_tuple)
 
     print(new_version, new_tag)
-    return (new_version, new_tag)
+    # return (new_version, new_tag)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Versioning utils")
-    parser.add_argument("--release_type", type=str, required=True, help="type of release = major/minor/patch")
+    parser.add_argument("--release-type", type=str, required=True, help="type of release = major/minor/patch")
     parser.add_argument(
-        "--update_version", action="store_true", required=False, help="updates the version in fairscale/__init__.py"
+        "--update-version", action="store_true", required=False, help="updates the version in fairscale/__init__.py"
     )
 
     args = parser.parse_args()
-    new_version, new_tag = main(args)
+    main(args)
     
