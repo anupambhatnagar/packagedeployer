@@ -6,7 +6,7 @@ from setup import find_version
 
 def get_next_version(release_type) -> Tuple[str, str]:
     current_ver = find_version("src/__init__.py")
-    version_list = [int(x) for x in current_ver.strip("\"").split(".")]
+    version_list = [int(x) for x in current_ver.strip("\'").split(".")]
     major, minor, patch = version_list[0], version_list[1], version_list[2]
     if release_type == "patch":
         patch += 1
